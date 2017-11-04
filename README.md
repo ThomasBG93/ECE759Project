@@ -9,4 +9,5 @@
     * ./mvMatrix r c mov
     *  input: row size, col size, amount of moves to make
     *  output: multiple matricies to the same file movingMatrix.txt
+    *  **BE VERY CAREFUL ON SIZE OF MATRIX AND AMOUNT OF MOVEMENT, THIS CODE IS NOT OPTIMIZED FOR MEMORY!**
       
