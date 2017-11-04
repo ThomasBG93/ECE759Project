@@ -10,11 +10,12 @@ int main(int argc, char *argv[])
 	int *matrix;
 	if(argc < 3){
 		printf("Wrong Input\nShould be ./randMatrix r c\n");
+		return 1;
 	}
 	int row = atoi(argv[1]);
 	int col = atoi(argv[2]);
 	int size = row*col;
-	matrix = malloc(size*sizeof(int));
+	matrix = (int*)malloc(size*sizeof(int));
 	int i = 0;
 
 	srand(time(NULL));
@@ -36,6 +37,7 @@ int main(int argc, char *argv[])
 	}
 
 	fclose(fileOut);
+	free(matrix);
 
 
 }
