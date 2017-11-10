@@ -6,7 +6,7 @@ typedef struct {
 	double strength;
 	int lifetime; 
 	int fertility; // defined by the movement
-	int aliveOrDead; // 0 is alive and 1 is dead
+	int aliveOrDead; // 1 is alive and 0 is dead
 	int xPos;
 	int yPos;
 }creature;

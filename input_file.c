@@ -5,13 +5,12 @@
 
 int main(int argc, char ** argv)
 {
-	if(argc != 2){
-		printf("Usage: ./gen_file size");
+	if(argc != 3){
+		printf("Usage: ./gen_file size creatureSize\n");
 		exit(1);
 	}
 	int size = atoi(argv[1]);
-	int spaces = size * size;
-	int numCreatures = spaces/2;
+	int numCreatures = atoi(argv[2]);
 	FILE* fp;
 	srand(time(NULL));  
     creature *array = (creature *)malloc(numCreatures * sizeof(creature));
@@ -22,7 +21,7 @@ int main(int argc, char ** argv)
 		array[i].strength = ((double)rand()/(double)(RAND_MAX)) * 10;
 		array[i].lifetime = rand() % 25 + 10;
 		array[i].fertility = 1;
-		array[i].aliveOrDead = 0;
+		array[i].aliveOrDead = 1;
 		array[i].xPos = rand() % size; 
 		array[i].yPos = rand() % size;
 	}
