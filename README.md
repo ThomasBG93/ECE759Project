@@ -10,4 +10,9 @@
     *  input: row size, col size, amount of moves to make
     *  output: multiple matricies to the same file movingMatrix.txt
     *  **BE VERY CAREFUL ON SIZE OF MATRIX AND AMOUNT OF MOVEMENT, THIS CODE IS NOT OPTIMIZED FOR MEMORY!**
+* input_file.c
+    * ./gen_file SIZE
+    *   input: dimension of one side of the board
+    *   output: characteristics of all creatures written to same file
+
       
