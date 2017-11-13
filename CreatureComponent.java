@@ -30,24 +30,32 @@ public class CreatureComponent extends JComponent
 		//String colS = console.next();
 		int col = COL;
 		int size = SIZE;
-		String inputFileName = "movingMatrix.txt";
+		String inputFileName = "ECE759Project/movingMatrix.txt";
 		File inputFile = new File(inputFileName);
 		Scanner in = null;
 		try {
 			in = new Scanner(inputFile);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("GRAPH FILE: " + inputFileName + 
+					" was not found.");
+			System.exit(1);
 		}
 		System.out.println("All good reading file");
 		int val = 0;
 		int i = 0;
 		int[] matrix = new int[size];
-		
+		System.out.println("read is: ");
 		for(i = 0; i < size; i++) {
 			String line = in.nextLine();
 			val = Integer.parseInt(line);
 			matrix[i] = val;
+			if(i<10)
+			{
+				System.out.printf(" %d", matrix[i]);
+			}
 		}
+		System.out.printf(" \n");
 		
 		
 		

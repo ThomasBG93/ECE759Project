@@ -30,12 +30,28 @@ public class CreatureViewer {
             BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = image.createGraphics();
             frame.paint(graphics2D);
-            ImageIO.write(image,"png", new File("C:\\Users\\Brian.Brian\\Documents\\ece759\\project\\image.png"));
+//            ImageIO.write(image,"png", new File("C:\\Users\\Brian.Brian\\Documents\\ece759\\project\\image.png"));
         }
         catch(Exception exception)
         {
             //code
         }
+        
+        //refresh
+        boolean a = true;
+        while(a)
+        {
+        	long millis = 1000;//refresh time
+			try {
+				Thread.sleep(millis);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	frame.validate();
+            frame.repaint();
+        }
+        
 	}
 	
 }
