@@ -24,7 +24,7 @@ debug : LDFLAGS := -fsanitize=address
 debug : ARCH :=
 debug : $(EXEC)
 
-all : gen_file
+all : gen_file check
 
 %.o : %.c Makefile
 	@ echo Compiling $<...
@@ -33,7 +33,9 @@ all : gen_file
 gen_file : input_file.o
 	@ echo Building $@...
 	@ $(CC) -o $@ $< $(LDFLAGS)
-
+check : check.o
+	@ echo Building $@...
+	@ $(CC) -o $@ $< $(LDFLAGS)
 
 .PHONY: clean
 clean:

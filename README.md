@@ -14,5 +14,8 @@
     * ./gen_file SIZE numCreatures
     *   input: dimension of one side of the board and number of creatures
     *   output: characteristics of all creatures written to same file
-
+* check.c
+    * ./gen_file SIZE numCreatures
+    *   input: dimension of one side of the board and number of creatures
+    *   output: characteristics of all creatures written to same file
       

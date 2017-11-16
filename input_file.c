@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
 		array[i].aliveOrDead = 1;
 		array[i].xPos = rand() % size; 
 		array[i].yPos = rand() % size;
-		array[i].isPaired = 0;
+		array[i].isPaired = -1;
 	}
 
 	fp = fopen("input.txt", "w");
