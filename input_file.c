@@ -24,6 +24,7 @@ int main(int argc, char ** argv)
 		array[i].aliveOrDead = 1;
 		array[i].xPos = rand() % size; 
 		array[i].yPos = rand() % size;
+		array[i].isPaired = 0;
 	}
 
 	fp = fopen("input.txt", "w");
@@ -39,6 +40,7 @@ int main(int argc, char ** argv)
 		fprintf(fp, "%d\n", array[j].lifetime);
 		fprintf(fp, "%d\n", array[j].fertility);
 		fprintf(fp, "%d\n", array[j].aliveOrDead);
+		fprintf(fp, "%d\n", array[j].isPaired);
 		fprintf(fp, "%d\n", array[j].xPos);
 		fprintf(fp, "%d\n", array[j].yPos);
 	}
