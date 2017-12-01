@@ -1,5 +1,5 @@
 # Warnings
-WFLAGS	:= -Wall -Wextra -Wsign-conversion -Wsign-compare
+WFLAGS	:= -Wall -Wextra -Wsign-conversion -Wsign-compare -fopenmp
 
 # Optimization and architecture
 OPT		:= -O3
@@ -11,7 +11,7 @@ CXXSTD	:= -std=c++11
 CCX	:= g++
 # Linker options
 LDOPT 	:= $(OPT)
-LDFLAGS := 
+LDFLAGS := -fopenmp
 BIN = "/usr/local/gcc/6.4.0/bin/gcc"
 .DEFAULT_GOAL := all
 
@@ -24,7 +24,7 @@ debug : LDFLAGS := -fsanitize=address
 debug : ARCH :=
 debug : $(EXEC)
 
-all : gen_file check
+all : gen_file check move
 
 %.o : %.c Makefile
 	@ echo Compiling $<...
@@ -34,6 +34,9 @@ gen_file : input_file.o
 	@ echo Building $@...
 	@ $(CC) -o $@ $< $(LDFLAGS)
 check : check.o
+	@ echo Building $@...
+	@ $(CC) -o $@ $< $(LDFLAGS)
+move : movement.o
 	@ echo Building $@...
 	@ $(CC) -o $@ $< $(LDFLAGS)
 
