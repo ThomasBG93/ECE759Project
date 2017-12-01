@@ -18,4 +18,8 @@
     * ./gen_file SIZE numCreatures
     *   input: dimension of one side of the board and number of creatures
     *   output: characteristics of all creatures written to same file
+* movement.c
+    * ./move SIZE numCreatures
+    *  input: dimension of one side of the board and number of creatures
+    *  outut: new characteristics of all creatures written to a file
       
