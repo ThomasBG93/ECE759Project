@@ -25,6 +25,7 @@ int main(int argc, char ** argv)
 		array[i].xPos = rand() % size; 
 		array[i].yPos = rand() % size;
 		array[i].isPaired = -1;
+		array[i].killedBy = -1;
 	}
 
 	fp = fopen("input.txt", "w");
@@ -43,6 +44,7 @@ int main(int argc, char ** argv)
 		fprintf(fp, "%d\n", array[j].isPaired);
 		fprintf(fp, "%d\n", array[j].xPos);
 		fprintf(fp, "%d\n", array[j].yPos);
+		fscanf(fp, "%d\n", array[j].killedBy);
 	}
 
 	fclose(fp);

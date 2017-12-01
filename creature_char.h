@@ -10,6 +10,7 @@ typedef struct {
 	int isPaired; // check if in conflict with another object
 	int xPos;
 	int yPos;
+	int killedBy;
 }creature;
 
 // list header types below here
