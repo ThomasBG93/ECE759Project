@@ -35,14 +35,23 @@ int main(int argc, char *argv[])
 	}
 	fclose(fp);
 	srand(time(NULL));
+	int xarray[size];
+	int yarray[size];
+	for(int i = 0; i < size; i++){
+		xarray[i] = array[i].xPos;
+		yarray[i] = array[i].yPos;
+	}
+
 	double start, end, time;
+	unsigned int seed;
 	start = omp_get_wtime();
 	#pragma omp parallel for
 		for(i=0; i < size; i++){
 			//printf("Before[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
 			//move(i,len,array);
-				int xchange = (rand()%3) -1;
-				int ychange = (rand()%3) -1;
+				seed = omp_get_thread_num();
+				int xchange = (rand_r(&seed)%3) -1;
+				int ychange = (rand_r(&seed)%3) -1;
 				//usleep(100);
 				//TODO do we want to wrap or fall off?
 				array[i].xPos = array[i].xPos + xchange;
