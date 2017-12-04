@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <time.h>
 #include <omp.h>
 #include "creature_char.h"
@@ -36,16 +37,31 @@ int main(int argc, char *argv[])
 	srand(time(NULL));
 	double start, end, time;
 	start = omp_get_wtime();
-	#pragma omp parallel
-	{
-		#pragma omp for
+	#pragma omp parallel for
 		for(i=0; i < size; i++){
 			//printf("Before[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
-			move(i,len,array);
+			//move(i,len,array);
+				int xchange = (rand()%3) -1;
+				int ychange = (rand()%3) -1;
+				//usleep(100);
+				//TODO do we want to wrap or fall off?
+				array[i].xPos = array[i].xPos + xchange;
+				if(array[i].xPos >= len){
+					array[i].xPos = 0;
+				}
+				if(array[i].xPos < 0){
+					array[i].xPos = len - 1;
+				}
+				array[i].yPos = array[i].yPos + ychange;
+				if(array[i].yPos >= len){
+					array[i].yPos = 0;
+				}
+				if(array[i].yPos < 0){
+					array[i].yPos = len - 1;
+				}
 			//printf("After[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
 		}
 
-	}
 	end = omp_get_wtime();
 	time = (end-start)*1000;
 	printf("Time: %f\n",time);
@@ -74,7 +90,7 @@ void move(int i, int len, creature *array)
 {
 	int xchange = (rand()%3) -1;
 	int ychange = (rand()%3) -1;
-	
+	//usleep(100);
 	//TODO do we want to wrap or fall off?
 	array[i].xPos = array[i].xPos + xchange;
 	if(array[i].xPos >= len){
