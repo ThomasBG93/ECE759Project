@@ -6,7 +6,7 @@
 #include "creature_char.h"
 
 
-void move(int i, int len, creature *array);
+void move(creature *array, int size, int len);
 
 int main(int argc, char *argv[])
 {
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	srand(time(NULL));
 
 	double start, end, time;
-	unsigned int seed;
+	
 	// start = omp_get_wtime();
 	// #pragma omp parallel for
 	#pragma omp parallel
@@ -46,34 +46,8 @@ int main(int argc, char *argv[])
 		#pragma omp single
 		start = omp_get_wtime();
 
-		#pragma omp for
-		for(i=0; i < size; i++){
-			//printf("Before[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
-			//move(i,len,array);
-				seed = omp_get_thread_num();
-				int xchange = (rand_r(&seed)%3) -1;
-				int ychange = (rand_r(&seed)%3) -1;
-				//usleep(100);
-				//TODO do we want to wrap or fall off?
-				if(array[i].lifetime <= 0){
-					array[i].aliveOrDead = -1;
-				}
-				array[i].xPos = array[i].xPos + xchange;
-				if(array[i].xPos >= len){
-					array[i].xPos = 0;
-				}
-				if(array[i].xPos < 0){
-					array[i].xPos = len - 1;
-				}
-				array[i].yPos = array[i].yPos + ychange;
-				if(array[i].yPos >= len){
-					array[i].yPos = 0;
-				}
-				if(array[i].yPos < 0){
-					array[i].yPos = len - 1;
-				}
-			//printf("After[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
-		}
+		
+		move(array,size,len);
 
 		#pragma omp barrier
 		#pragma omp single
@@ -105,25 +79,36 @@ int main(int argc, char *argv[])
 
 }
 
-void move(int i, int len, creature *array)
+void move( creature *array, int size, int len)
 {
-	int xchange = (rand()%3) -1;
-	int ychange = (rand()%3) -1;
-	//usleep(100);
-	//TODO do we want to wrap or fall off?
-	array[i].xPos = array[i].xPos + xchange;
-	if(array[i].xPos >= len){
-		array[i].xPos = 0;
-	}
-	if(array[i].xPos < 0){
-		array[i].xPos = len - 1;
-	}
-	array[i].yPos = array[i].yPos + ychange;
-	if(array[i].yPos >= len){
-		array[i].yPos = 0;
-	}
-	if(array[i].yPos < 0){
-		array[i].yPos = len - 1;
+	unsigned int seed;
+	int i = 0;
+	#pragma omp for
+	for(i=0; i < size; i++){
+		//printf("Before[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
+		seed = omp_get_thread_num();
+		int xchange = (rand_r(&seed)%3) -1;
+		int ychange = (rand_r(&seed)%3) -1;
+		//usleep(100);
+		//TODO do we want to wrap or fall off?
+		if(array[i].lifetime <= 0){
+			array[i].aliveOrDead = -1;
+		}
+		array[i].xPos = array[i].xPos + xchange;
+		if(array[i].xPos >= len){
+			array[i].xPos = 0;
+		}
+		if(array[i].xPos < 0){
+			array[i].xPos = len - 1;
+		}
+		array[i].yPos = array[i].yPos + ychange;
+		if(array[i].yPos >= len){
+			array[i].yPos = 0;
+		}
+		if(array[i].yPos < 0){
+			array[i].yPos = len - 1;
+		}
+		//printf("After[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
 	}
 	
 }
