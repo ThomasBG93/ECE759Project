@@ -44,8 +44,14 @@ int main(int argc, char *argv[])
 
 	double start, end, time;
 	unsigned int seed;
-	start = omp_get_wtime();
-	#pragma omp parallel for
+	// start = omp_get_wtime();
+	// #pragma omp parallel for
+	#pragma omp parallel
+	{
+		#pragma omp single
+		start = omp_get_wtime();
+
+		#pragma omp for
 		for(i=0; i < size; i++){
 			//printf("Before[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
 			//move(i,len,array);
@@ -71,7 +77,12 @@ int main(int argc, char *argv[])
 			//printf("After[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
 		}
 
-	end = omp_get_wtime();
+		#pragma omp barrier
+		#pragma omp single
+		end = omp_get_wtime();
+	}
+
+	// end = omp_get_wtime();
 	time = (end-start)*1000;
 	printf("Time: %f\n",time);
 	
