@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 		fscanf(fp, "%d\n", &array[i].isPaired);
 		fscanf(fp, "%d\n", &array[i].xPos);
 		fscanf(fp, "%d\n", &array[i].yPos);
+		fscanf(fp, "%d\n", &array[i].killedBy);
 	}
 	fclose(fp);
 	srand(time(NULL));
@@ -84,7 +85,7 @@ int main(int argc, char *argv[])
 	printf("Time: %f\n",time);
 	
 
-	fp = fopen("testMove.txt", "w");
+	fp = fopen("out_move.txt", "w");
 	for(int i =0; i < size; i++){
 		fprintf(fp, "%d\n", array[i].id);
 		fprintf(fp, "%f\n", array[i].strength);
@@ -94,6 +95,7 @@ int main(int argc, char *argv[])
 		fprintf(fp, "%d\n", array[i].isPaired);
 		fprintf(fp, "%d\n", array[i].xPos);
 		fprintf(fp, "%d\n", array[i].yPos);
+		fprintf(fp, "%d\n", array[i].killedBy);
 	}
 	fclose(fp);
 

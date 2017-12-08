@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <omp.h>
 #include "creature_char.h"
 
 void check_confilct(creature *array, int n); 
@@ -11,7 +12,7 @@ int main(int argc, char** argv){
 	int numCreatures = atoi(argv[2]);
 	FILE* fp;
 	creature *array = (creature *)malloc(numCreatures * sizeof(creature));
-	fp = fopen("input.txt", "r");
+	fp = fopen("out_move.txt", "r");
 	for(int j = 0; j < numCreatures; j++) {
 		fscanf(fp, "%d\n", &array[j].id);
 		fscanf(fp, "%lf\n", &array[j].strength);
@@ -21,12 +22,13 @@ int main(int argc, char** argv){
 		fscanf(fp, "%d\n", &array[j].isPaired);
 		fscanf(fp, "%d\n", &array[j].xPos);
 		fscanf(fp, "%d\n", &array[j].yPos);
+		fscanf(fp, "%d\n", &array[j].killedBy);
 	}
 	fclose(fp);
-	array[2].xPos= 2; array[2].yPos= 2; 
-	array[4].xPos= 2; array[4].yPos= 2;
+	//array[2].xPos= 2; array[2].yPos= 2; 
+	//array[4].xPos= 2; array[4].yPos= 2;
 	check_confilct(array, numCreatures);
-	fp = fopen("test.txt", "w");
+	fp = fopen("out_check.txt", "w");
 	for(int j =0; j < numCreatures; j++){
 		fprintf(fp, "%d\n", array[j].id);
 		fprintf(fp, "%f\n", array[j].strength);
@@ -36,6 +38,7 @@ int main(int argc, char** argv){
 		fprintf(fp, "%d\n", array[j].isPaired);
 		fprintf(fp, "%d\n", array[j].xPos);
 		fprintf(fp, "%d\n", array[j].yPos);
+		fprintf(fp, "%d\n", array[j].killedBy);
 	}
 	fclose(fp);
 
@@ -45,14 +48,19 @@ int main(int argc, char** argv){
 }
 // accepts the array of creatures and 
 void check_confilct(creature *array, int n){
-	for(int i = 0; i < n - 1; i++){
-		if(array[i].isPaired == -1 && array[i].aliveOrDead == 1){
-			for(int j = i + 1; j < n; j++){
-				if(array[i].xPos == array[j].xPos && array[i].yPos == array[j].yPos && array[j].aliveOrDead == 1){
-					array[i].isPaired = j;
-					array[j].isPaired = i;
+		FILE* san;
+		san = fopen("sanityCheck.txt","w");
+		for(int i = 0; i < n - 1; i++){
+			if(array[i].isPaired == -1 && array[i].aliveOrDead == 1){
+				for(int j = i + 1; j < n; j++){
+					if(array[i].xPos == array[j].xPos && array[i].yPos == array[j].yPos && array[j].aliveOrDead == 1){
+						array[i].isPaired = j;
+						array[j].isPaired = i;
+						fprintf(san,"isPaired: %d --> %d\n",i,j);
+					}
 				}
 			}
 		}
-	}
+		fclose(san);
+
 }
