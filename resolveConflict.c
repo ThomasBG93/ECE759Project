@@ -5,7 +5,7 @@
 #include <omp.h>
 #include "creature_char.h"
 
-void resolve( creature *array, int size);
+int resolve( creature *array, int size);
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 		fscanf(fp, "%d\n", &array[i].killedBy);
 	}
 
-	resolve(array,size);
+	int killedOff = resolve(array,size);
 
 	fp = fopen("out_resolve.txt", "w");
 	for(int i =0; i < size; i++){
@@ -53,12 +53,13 @@ int main(int argc, char *argv[])
 
 }
 
-void resolve( creature* array, int size)
+int resolve( creature* array, int size)
 {
 	FILE* san;
 	san = fopen("sanityResolve.txt","w");
 	int i;
 	int j =0;
+	int killedOff = 0;
 	for(i=0; i < size; i++){
 		if(array[i].isPaired > -1){
 			j = array[i].isPaired;
@@ -72,6 +73,7 @@ void resolve( creature* array, int size)
 
 					array[i].isPaired = -1;
 					array[i].lifetime += array[j].lifetime;
+					killedOff += 1;
 					fprintf(san,"%d killed %d\n",i,j);
 					//printf("%d killed %d\n",i,j);
 				}else{
@@ -81,6 +83,7 @@ void resolve( creature* array, int size)
 
 					array[j].isPaired = -1;
 					array[j].lifetime += array[i].lifetime;
+					killedOff += 1;
 					fprintf(san,"%d killed %d\n",j,i);
 					//printf("%d killed %d\n",j,i);
 				}
@@ -96,6 +99,7 @@ void resolve( creature* array, int size)
 
 					array[i].isPaired = -1;
 					array[i].lifetime += array[j].lifetime;
+					killedOff += 1;
 					fprintf(san,"%d killed %d\n",i,j);
 					//printf("%d killed %d\n",i,j);
 				}else{
@@ -105,6 +109,7 @@ void resolve( creature* array, int size)
 
 					array[j].isPaired = -1;
 					array[j].lifetime += array[i].lifetime;
+					killedOff += 1;
 					fprintf(san,"%d killed %d\n",j,i);
 					//printf("%d killed %d\n",j,i);
 				}
@@ -114,4 +119,5 @@ void resolve( creature* array, int size)
 		}
 	}
 	fclose(san);
+	return killedOff;
 }
