@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 	fp = fopen("out_spawn.txt", "w");
 	for(int i =0; i < size; i++){
 		fprintf(fp, "%d\n", array[i].id);
-		fprintf(fp, "%f\n", array[i].strength);
+		fprintf(fp, "%lf\n", array[i].strength);
 		fprintf(fp, "%d\n", array[i].lifetime);
 		fprintf(fp, "%d\n", array[i].base_life);
 		fprintf(fp, "%d\n", array[i].fertility);
@@ -99,7 +99,6 @@ void spawn( creature *array, int size, int len)
 				if(array[j].aliveOrDead == 0)
 				{
 					// retain creature id
-					array[j].id = array[i].id;
 					array[j].strength = array[i].strength + (rand()%7) - 3;
 					 
 					array[j].base_life = array[i].base_life + (rand()%11) - 5;

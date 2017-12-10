@@ -50,7 +50,7 @@ int main(int argc, char ** argv)
 		fprintf(fp, "%d\n", array[j].isPaired);
 		fprintf(fp, "%d\n", array[j].xPos);
 		fprintf(fp, "%d\n", array[j].yPos);
-		fscanf(fp, "%d\n", array[j].killedBy);
+		fprintf(fp, "%d\n", array[j].killedBy);
 	}
 
 	fclose(fp);
