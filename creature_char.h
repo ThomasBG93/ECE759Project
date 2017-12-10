@@ -4,7 +4,8 @@
 typedef struct {
 	int id;
 	double strength;
-	int lifetime; 
+	int lifetime;
+	int base_life; // original life set  
 	int fertility; // defined by the movement
 	int aliveOrDead; // 1 is alive and 0 is dead
 	int isPaired; // check if in conflict with another object

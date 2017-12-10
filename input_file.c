@@ -20,12 +20,17 @@ int main(int argc, char ** argv)
 		array[i].id = i;
 		array[i].strength = ((double)rand()/(double)(RAND_MAX)) * 10;
 		array[i].lifetime = rand() % 25 + 10;
-		array[i].fertility = 1;
-		array[i].aliveOrDead = 1;
+		array[i].base_life = array[i].lifetime;
+		array[i].fertility = rand() % 15 + 5;
 		array[i].xPos = rand() % size; 
 		array[i].yPos = rand() % size;
 		array[i].isPaired = -1;
 		array[i].killedBy = -1;
+		//made minor change here
+		if(i < numCreatures/2)
+			array[i].aliveOrDead = 1;
+		else 
+			array[i].aliveOrDead = 0;
 	}
 
 	fp = fopen("input.txt", "w");
@@ -39,6 +44,7 @@ int main(int argc, char ** argv)
 		fprintf(fp, "%d\n", array[j].id);
 		fprintf(fp, "%f\n", array[j].strength);
 		fprintf(fp, "%d\n", array[j].lifetime);
+		fprintf(fp, "%d\n", array[j].base_life);
 		fprintf(fp, "%d\n", array[j].fertility);
 		fprintf(fp, "%d\n", array[j].aliveOrDead);
 		fprintf(fp, "%d\n", array[j].isPaired);

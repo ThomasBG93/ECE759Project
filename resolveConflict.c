@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 		fscanf(fp, "%d\n", &array[i].id);
 		fscanf(fp, "%lf\n", &array[i].strength);
 		fscanf(fp, "%d\n", &array[i].lifetime);
+		fscanf(fp, "%d\n", &array[i].base_life);
 		fscanf(fp, "%d\n", &array[i].fertility);
 		fscanf(fp, "%d\n", &array[i].aliveOrDead);
 		fscanf(fp, "%d\n", &array[i].isPaired);
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
 		fprintf(fp, "%d\n", array[i].id);
 		fprintf(fp, "%f\n", array[i].strength);
 		fprintf(fp, "%d\n", array[i].lifetime);
+		fprintf(fp, "%d\n", array[i].base_life);
 		fprintf(fp, "%d\n", array[i].fertility);
 		fprintf(fp, "%d\n", array[i].aliveOrDead);
 		fprintf(fp, "%d\n", array[i].isPaired);

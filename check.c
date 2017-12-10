@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <omp.h>
+//#include <omp.h>
 #include "creature_char.h"
 
 void check_confilct(creature *array, int n); 
@@ -17,6 +17,7 @@ int main(int argc, char** argv){
 		fscanf(fp, "%d\n", &array[j].id);
 		fscanf(fp, "%lf\n", &array[j].strength);
 		fscanf(fp, "%d\n", &array[j].lifetime);
+		fscanf(fp, "%d\n", array[j].base_life);
 		fscanf(fp, "%d\n", &array[j].fertility);
 		fscanf(fp, "%d\n", &array[j].aliveOrDead);
 		fscanf(fp, "%d\n", &array[j].isPaired);
@@ -33,6 +34,7 @@ int main(int argc, char** argv){
 		fprintf(fp, "%d\n", array[j].id);
 		fprintf(fp, "%f\n", array[j].strength);
 		fprintf(fp, "%d\n", array[j].lifetime);
+		fprintf(fp, "%d\n", array[j].base_life);
 		fprintf(fp, "%d\n", array[j].fertility);
 		fprintf(fp, "%d\n", array[j].aliveOrDead);
 		fprintf(fp, "%d\n", array[j].isPaired);
