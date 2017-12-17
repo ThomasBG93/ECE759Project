@@ -5,12 +5,26 @@
 #include <omp.h>
 #include "creature_char.h"
 
+#define STEPAMOUNT 100000
 
 void check_conflict(creature *array, int n);
 void move( creature *array, int size, int len);
 int resolve( creature* array, int size);
 void spawn( creature *array, int size, int len, int iter);
 void subAndCheckIfAlive(creature *array, int size);
+void printMatrix(creature *array, int size);
+
+void printMatrix(creature *array, int size)
+{
+	FILE *fp;
+	fp = fopen("out_Matrix.txt", "w");
+	for(int i =0; i < size; i++){
+
+		fprintf(fp, "%d\n", array[i].aliveOrDead);
+
+	}
+	fclose(fp); 
+}
 
 int main(int argc, char *argv[])
 {
@@ -21,36 +35,40 @@ int main(int argc, char *argv[])
 	int size = atoi(argv[2]); //numCreatures;
 	int len = atoi(argv[1]);	//length of one side
 	int numThreads = atoi(argv[3]);
-
-	FILE* fp;
-	creature *array = (creature *)malloc(size * sizeof(creature));
-	fp = fopen("input.txt", "r");
-	for(int i = 0; i < size; i++) {
-		fscanf(fp, "%d\n", &array[i].id);
-		fscanf(fp, "%lf\n", &array[i].strength);
-		fscanf(fp, "%d\n", &array[i].lifetime);
-		fscanf(fp, "%d\n", &array[i].base_life);
-		fscanf(fp, "%d\n", &array[i].fertility);
-		fscanf(fp, "%d\n", &array[i].aliveOrDead);
-		fscanf(fp, "%d\n", &array[i].isPaired);
-		fscanf(fp, "%d\n", &array[i].xPos);
-		fscanf(fp, "%d\n", &array[i].yPos);
-		fscanf(fp, "%d\n", &array[i].killedBy);
-	}
-	fclose(fp);
 	srand(time(NULL));
+	creature *array = (creature *)malloc(size * sizeof(creature));
+	for(int i = 0; i < numCreatures ; i++){
+		array[i].id = i;
+		array[i].strength = ((double)rand()/(double)(RAND_MAX)) * 10;
+		array[i].lifetime = rand() % 25 + 10;
+		array[i].base_life = array[i].lifetime;
+		array[i].fertility = rand() % 15 + 5;
+		array[i].xPos = rand() % size; 
+		array[i].yPos = rand() % size;
+		array[i].isPaired = -1;
+		array[i].killedBy = -1;
+		//made minor change here
+		if(i < numCreatures/2)
+			array[i].aliveOrDead = 1;
+		else 
+			array[i].aliveOrDead = 0;
+	}
+
+	
 
 	//double start, end, time;
 	// try for 25 iters
-	for(int i = 0; i < 100000; i++)
+	for(int i = 0; i < STEPAMOUNT i++)
 	{
 		check_conflict(array, size);
 		resolve(array, size);
+		printMatrix(array,size);
 		move(array, size, len);
 		check_conflict(array, size);
 		resolve(array, size);
 		spawn(array, size, len, i);
-    subAndCheckIfAlive(array, size);
+    	subAndCheckIfAlive(array, size);
+ 
     //printf("iter num: %d\n", i); 
 		//if(iter % 20)
 		//	writeMatrix(array);
@@ -98,20 +116,20 @@ int main(int argc, char *argv[])
 }
 
 void check_conflict(creature *array, int n){
-		FILE* san;
-		san = fopen("sanityCheck.txt","w");
+		//FILE* san;
+		//san = fopen("sanityCheck.txt","w");
 		for(int i = 0; i < n - 1; i++){
 			if(array[i].isPaired == -1 && array[i].aliveOrDead == 1){
 				for(int j = i + 1; j < n; j++){
 					if(array[i].xPos == array[j].xPos && array[i].yPos == array[j].yPos && array[j].aliveOrDead == 1){
 						array[i].isPaired = j;
 						array[j].isPaired = i;
-						fprintf(san,"isPaired: %d --> %d\n",i,j);
+						//fprintf(san,"isPaired: %d --> %d\n",i,j);
 					}
 				}
 			}
 		}
-		fclose(san);
+		//fclose(san);
 
 }
 void move( creature *array, int size, int len)
@@ -170,7 +188,7 @@ int resolve( creature* array, int size)
 					array[i].lifetime += array[j].lifetime;
 					killedOff += 1;
 					//fprintf(san,"%d killed %d\n",i,j);
-					printf("%d killed %d\n",i,j);
+					//printf("%d killed %d\n",i,j);
 				}else{
 					array[i].aliveOrDead = 0;
 					array[i].isPaired = -1;
@@ -180,7 +198,7 @@ int resolve( creature* array, int size)
 					array[j].lifetime += array[i].lifetime;
 					killedOff += 1;
 					//fprintf(san,"%d killed %d\n",j,i);
-					printf("%d killed %d\n",j,i);
+					//printf("%d killed %d\n",j,i);
 				}
 			}else{ //the creature you are paired with is not paired with you
 
@@ -196,7 +214,7 @@ int resolve( creature* array, int size)
 					array[i].lifetime += array[j].lifetime;
 					killedOff += 1;
 					//fprintf(san,"%d killed %d\n",i,j);
-					printf("%d killed %d\n",i,j);
+					//printf("%d killed %d\n",i,j);
 				}else{
 					array[i].aliveOrDead = 0;
 					array[i].isPaired = -1;
@@ -206,7 +224,7 @@ int resolve( creature* array, int size)
 					array[j].lifetime += array[i].lifetime;
 					killedOff += 1;
 					//fprintf(san,"%d killed %d\n",j,i);
-					printf("%d killed %d\n",j,i);
+					//printf("%d killed %d\n",j,i);
 				}
 			}
 			
@@ -259,7 +277,7 @@ void spawn( creature *array, int size, int len, int iter)
 						array[j].strength = 10.0;
 					else if(array[j].strength < 0)
 						array[j].strength = 0.0;
-					printf("creature %d spawned creature %d\n",i,j);
+					//printf("creature %d spawned creature %d\n",i,j);
 					break;
 				}
 			}
@@ -279,7 +297,7 @@ void subAndCheckIfAlive(creature *array, int size)
               if(array[i].lifetime==1){
                   array[i].lifetime = 0;
                   array[i].aliveOrDead = 0;
-                  printf("creature %d has died!\n", i);
+                  //printf("creature %d has died!\n", i);
               }
               else{
                   array[i].lifetime--;
