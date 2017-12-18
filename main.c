@@ -8,19 +8,19 @@
 #include <sys/stat.h>
 #include <assert.h>
 #include <errno.h>
-//#include <omp.h>
+#include <omp.h>
 #include "creature_char.h"
 
-#define STEPAMOUNT 1000000
+#define STEPAMOUNT 100
 
 void check_conflict(creature *array, int n);
 void move( creature *array, int size, int len);
 int resolve( creature* array, int size);
 void spawn( creature *array, int size, int len, int iter);
 void subAndCheckIfAlive(creature *array, int size);
-void printMatrix(creature *array, int size, int len, int* base_img);
+void printMatrix(creature *array, int size, int len, void* base_img);
 
-void printMatrix(creature *array, int size, int len, int* base_img)
+void printMatrix(creature *array, int size, int len, void* base_img)
 {
 	// FILE *fp;
 	// fp = fopen("out_Matrix.txt", "w");
@@ -94,7 +94,7 @@ void printMatrix(creature *array, int size, int len, int* base_img)
 
 int main(int argc, char *argv[])
 {
-	if(argc < 3){
+	if(argc < 4){
 		printf("Wrong input, should be: ./main length numCreatures numThreads\n");
 		return 1;
 	}
@@ -103,7 +103,8 @@ int main(int argc, char *argv[])
 
 	int size = atoi(argv[2]); //numCreatures;
 	int len = atoi(argv[1]);	//length of one side
-	//int numThreads = atoi(argv[3]);
+	int numThreads = atoi(argv[3]);
+	omp_set_num_threads(numThreads);
 	srand(time(NULL));
 	creature *array = (creature *)malloc(size * sizeof(creature));
 	for(int i = 0; i < size ; i++){
@@ -129,27 +130,48 @@ int main(int argc, char *argv[])
 		fprintf(stdout,"errno: %i\n",errno);
 
 	//double start, end, time;
+	double start, end, time;
 	// try for 25 iters
-	for(int i = 0; i < STEPAMOUNT; i++)
+	#pragma omp parallel
 	{
-		// fprintf(stdout,"here starting\n");
-		check_conflict(array, size);
-		//fprintf(stdout,"here after check conflict\n");
-		resolve(array, size);
-		//fprintf(stdout,"here before print\n");
-		printMatrix(array,size, len, base_img);
-		//fprintf(stdout,"here after print\n");
-		move(array, size, len);
-		check_conflict(array, size);
-		resolve(array, size);
-		spawn(array, size, len, i);
-    	subAndCheckIfAlive(array, size);
- 	   	//sleep(1);
- 
-    //printf("iter num: %d\n", i); 
-		//if(iter % 20)
-		//	writeMatrix(array);
+		for(int i = 0; i < STEPAMOUNT; i++)
+		{
+	
+				// fprintf(stdout,"here starting\n");
+			#pragma omp single
+			check_conflict(array, size);
+			//fprintf(stdout,"here after check conflict\n");
+			#pragma omp single
+			resolve(array, size);
+			//fprintf(stdout,"here before print\n");
+			#pragma omp single
+			printMatrix(array,size, len, base_img);
+			//fprintf(stdout,"here after print\n");
+			#pragma omp single
+			start = omp_get_wtime();
+			move(array, size, len);
+			#pragma omp barrier
+			#pragma omp single
+			end = omp_get_wtime();
+			time = (end-start)*1000;
+			#pragma omp single
+			check_conflict(array, size);
+			#pragma omp single
+			resolve(array, size);
+			#pragma omp single
+			spawn(array, size, len, i);
+			#pragma omp single
+ 	   		subAndCheckIfAlive(array, size);
+ 			   	//sleep(1);
+ 	
+    		//printf("iter num: %d\n", i); 
+			//if(iter % 20)
+			//	writeMatrix(array);
+		}
 	}
+	time = (end-start)*1000;
+	printf("Time: %f\n",time);
+	
 	
 	// start = omp_get_wtime();
 	// #pragma omp parallel for
@@ -213,17 +235,20 @@ void check_conflict(creature *array, int n){
 }
 void move( creature *array, int size, int len)
 {
-	//unsigned int seed;
+	unsigned int seed;
+	seed = time(NULL);
 	int i = 0;
 	//#pragma omp for
-	srand(time(NULL));
+	//srand(time(NULL));
+	//printf("Number of Threads Executing Move: %d\n",omp_get_thread_num());
+	#pragma omp for
 	for(i=0; i < size; i++){
 		//printf("Before[%d]: (%d,%d)\n",i,array[i].xPos,array[i].yPos);
-		//seed = omp_get_thread_num();
-		// int xchange = (rand_r(&seed)%3) -1;
-		// int ychange = (rand_r(&seed)%3) -1;
-		int xchange = rand()%3 -1;
-		int ychange = rand()%3 -1;
+		
+		 int xchange = (rand_r(&seed)%3) -1;
+		 int ychange = (rand_r(&seed)%3) -1;
+		//int xchange = rand()%3 -1;
+		//int ychange = rand()%3 -1;
 		//usleep(100);
 		//TODO do we want to wrap or fall off?
 		// if(array[i].lifetime <= 0){
