@@ -10,48 +10,48 @@ import javax.swing.JFrame;
 
 public class CreatureViewer {
 	
-	private static final int WIDTH = 1000;
-	private static final int HEIGHT = 1000;
+    private static final int WIDTH = 100;
+    private static final int HEIGHT = 100;
+    
+    public static void main(String[] args) {
+	JFrame frame = new JFrame();
+	frame.setSize(WIDTH*11,HEIGHT*11);
+	frame.setTitle("Creatures");
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.getContentPane().setBackground(Color.black);
 	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(WIDTH,HEIGHT);
-		frame.setTitle("Creatures");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setBackground(Color.black);
-		
-		CreatureComponent creature1 = new CreatureComponent();
-		frame.add(creature1);
-
-		frame.setVisible(true);
-		
+	CreatureComponent creature1 = new CreatureComponent();
+	frame.add(creature1);
+	
+	frame.setVisible(true);
+	
         try
-        {
-            BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics2D = image.createGraphics();
-            frame.paint(graphics2D);
-//            ImageIO.write(image,"png", new File("C:\\Users\\Brian.Brian\\Documents\\ece759\\project\\image.png"));
-        }
+	    {
+		BufferedImage image = new BufferedImage(WIDTH*11, HEIGHT*11, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics2D = image.createGraphics();
+		//graphics2D.scale(10.0, 10.0);
+		frame.paint(graphics2D);
+		//            ImageIO.write(image,"png", new File("C:\\Users\\Brian.Brian\\Documents\\ece759\\project\\image.png"));
+	    }
         catch(Exception exception)
-        {
-            //code
-        }
+	    {
+		//code
+	    }
         
         //refresh
         boolean a = true;
         while(a)
-        {
-        	long millis = 1000;//refresh time
-			try {
-				Thread.sleep(millis);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	frame.validate();
-            frame.repaint();
-        }
+	    {
+		//try {
+		//    Thread.sleep(millis);
+		//} catch (InterruptedException e) {
+		    // TODO Auto-generated catch block
+		//    e.printStackTrace();
+		//}
+		frame.validate();
+		frame.repaint();
+	    }
         
-	}
-	
+    }
+    
 }

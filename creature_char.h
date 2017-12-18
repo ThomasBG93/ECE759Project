@@ -3,7 +3,7 @@
 
 typedef struct {
 	int id;
-	double strength;
+	int strength;
 	int lifetime;
 	int base_life; // original life set  
 	int fertility; // defined by the movement
