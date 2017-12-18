@@ -25,7 +25,7 @@
       
 
 
-HOW TO RUN JAVA CODE
+* HOW TO RUN JAVA CODE
     *  Compile: javac *.java     
     *  variables need to set:  in CreatureComponent.java, line 17 SIZE,line 18 COL, line 19 ROW
     *                          in CreatureViewer.java, line 13 WIDTH,line 14 HEIGHT   
