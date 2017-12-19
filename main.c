@@ -18,9 +18,9 @@ void move( creature *array, int size, int len);
 int resolve( creature* array, int size);
 void spawn( creature *array, int size, int len, int iter);
 void subAndCheckIfAlive(creature *array, int size);
-void printMatrix(creature *array, int size, int len, void* base_img);
+void printMatrix(creature *array, int size, int len, void* base_img, int* aliveList);
 
-void printMatrix(creature *array, int size, int len, void* base_img)
+void printMatrix(creature *array, int size, int len, void* base_img, int* aliveList)
 {
 	// FILE *fp;
 	// fp = fopen("out_Matrix.txt", "w");
@@ -44,7 +44,7 @@ void printMatrix(creature *array, int size, int len, void* base_img)
 	// if(base_img == MAP_FAILED)
 	// 	fprintf(stdout,"errno: %i\n",errno);
 	int *data_base = (int *) base_img;
-	int aliveList[size];
+	//int aliveList[size];
 	for(int i = 0; i < size; i++)
 	{
 		aliveList[i] = 0;
@@ -70,8 +70,8 @@ void printMatrix(creature *array, int size, int len, void* base_img)
 	data = data_base;
 	for(int i =0; i < size; i++)
 	{
-		*data = aliveList[i];
-		data++;
+		data[i] = aliveList[i];
+		//data++;
 	}
 
 
@@ -124,6 +124,7 @@ int main(int argc, char *argv[])
 			array[i].aliveOrDead = 0;
 	}
 
+	int *aliveList = (int*)malloc(size*sizeof(int));
 	int fd = open("movingMatrix.txt", O_RDWR );
 	void *base_img = mmap(NULL, 40000,PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if(base_img == MAP_FAILED)
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
 			resolve(array, size);
 			//fprintf(stdout,"here before print\n");
 			#pragma omp single
-			printMatrix(array,size, len, base_img);
+			printMatrix(array,size, len, base_img, aliveList);
 			//fprintf(stdout,"here after print\n");
 			#pragma omp single
 			start = omp_get_wtime();
