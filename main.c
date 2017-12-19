@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 
 	int *aliveList = (int*)malloc(size*sizeof(int));
 	int fd = open("movingMatrix.txt", O_RDWR );
-	void *base_img = mmap(NULL, 40000,PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	void *base_img = mmap(NULL, 4*size,PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if(base_img == MAP_FAILED)
 		fprintf(stdout,"errno: %i\n",errno);
 
