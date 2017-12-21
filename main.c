@@ -51,15 +51,15 @@ void printMatrix(creature *array, int size, int len, void* base_img, int* aliveL
 
 int main(int argc, char *argv[])
 {
-	if(argc < 3){
-		printf("Wrong input, should be: ./main length numThreads\n");
+	if(argc < 2){
+		printf("Wrong input, should be: ./main numThreads\n");
 		return 1;
 	}
 
 
 
-	int len = atoi(argv[1]);	//length of one side
-	int numThreads = atoi(argv[2]);
+	int len = 100;	//length of one side
+	int numThreads = atoi(argv[1]);
 	int size = len*len;
 
 	omp_set_num_threads(numThreads);
