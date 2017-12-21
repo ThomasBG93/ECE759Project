@@ -24,7 +24,7 @@ debug : LDFLAGS := -fsanitize=address
 debug : ARCH :=
 debug : $(EXEC)
 
-all : gen_file check spawn move main
+all : main
 
 %.o : %.c Makefile
 	@ echo Compiling $<...
