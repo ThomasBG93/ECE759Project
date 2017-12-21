@@ -11,7 +11,7 @@
 #include <omp.h>
 #include "creature_char.h"
 
-#define STEPAMOUNT 1000
+#define STEPAMOUNT 5000
 
 void check_conflict(creature *array, int n);
 void move( creature *array, int size, int len);
