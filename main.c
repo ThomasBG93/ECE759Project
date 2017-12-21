@@ -135,6 +135,8 @@ int main(int argc, char *argv[])
 	// try for 25 iters
 	#pragma omp parallel
 	{
+		#pragma omp single
+		start = omp_get_wtime();
 		for(int i = 0; i < STEPAMOUNT; i++)
 		{
 	
@@ -142,25 +144,26 @@ int main(int argc, char *argv[])
 			#pragma omp single
 			check_conflict(array, size);
 			//fprintf(stdout,"here after check conflict\n");
+
 			#pragma omp single
 			resolve(array, size);
 			//fprintf(stdout,"here before print\n");
+
 			#pragma omp single
 			printMatrix(array,size, len, base_img, aliveList);
 			//fprintf(stdout,"here after print\n");
-			#pragma omp single
-			start = omp_get_wtime();
+			
 			move(array, size, len);
-			#pragma omp barrier
-			#pragma omp single
-			end = omp_get_wtime();
-			time = (end-start)*1000;
+			
 			#pragma omp single
 			check_conflict(array, size);
+
 			#pragma omp single
 			resolve(array, size);
+
 			#pragma omp single
 			spawn(array, size, len, i);
+
 			#pragma omp single
  	   		subAndCheckIfAlive(array, size);
  			   	//sleep(1);
@@ -169,6 +172,10 @@ int main(int argc, char *argv[])
 			//if(iter % 20)
 			//	writeMatrix(array);
 		}
+		#pragma omp barrier
+		#pragma omp single
+		end = omp_get_wtime();
+		time = (end-start)*1000;
 	}
 	time = (end-start)*1000;
 	printf("Time: %f\n",time);
