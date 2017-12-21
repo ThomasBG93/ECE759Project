@@ -12,7 +12,7 @@
     *  input: image files written by c program
     *  output: void
     
-*Instructions on beginning a simulation
+* Instructions on beginning a simulation
    * 1. Run make to compile the c program and javac *.java the java code.
    * 2. Run java CreatureViewer lengthofOneSideofBoard
    * 3.Run ./main numThreads
