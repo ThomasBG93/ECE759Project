@@ -11,7 +11,7 @@
 #include <omp.h>
 #include "creature_char.h"
 
-#define STEPAMOUNT 100
+#define STEPAMOUNT 1000
 
 void check_conflict(creature *array, int n);
 void move( creature *array, int size, int len);
@@ -110,15 +110,15 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < size ; i++){
 		array[i].id = i;
 		array[i].strength = rand() % 32 + 1;
-		array[i].lifetime = rand() % 5 + 15;
+		array[i].lifetime = rand() % 5 + 35;
 		array[i].base_life = array[i].lifetime;
-		array[i].fertility = rand() % 20 + 15;
+		array[i].fertility = rand() % 20 + 45;
 		array[i].xPos = rand() % len; 
 		array[i].yPos = rand() % len;
 		array[i].isPaired = -1;
 		array[i].killedBy = -1;
 		//made minor change here
-		if(i < size/2)
+		if(i < size/100)
 			array[i].aliveOrDead = 1;
 		else 
 			array[i].aliveOrDead = 0;
@@ -131,12 +131,11 @@ int main(int argc, char *argv[])
 		fprintf(stdout,"errno: %i\n",errno);
 
 	//double start, end, time;
-	double start, end, time;
+	double start, end, time, count;
 	// try for 25 iters
 	#pragma omp parallel
 	{
-		#pragma omp single
-		start = omp_get_wtime();
+		
 		for(int i = 0; i < STEPAMOUNT; i++)
 		{
 	
@@ -149,12 +148,17 @@ int main(int argc, char *argv[])
 			resolve(array, size);
 			//fprintf(stdout,"here before print\n");
 
-			#pragma omp single
-			printMatrix(array,size, len, base_img, aliveList);
+			//#pragma omp single
+			//printMatrix(array,size, len, base_img, aliveList);
 			//fprintf(stdout,"here after print\n");
-			
+			#pragma omp single
+			start = omp_get_wtime();
 			move(array, size, len);
-			
+			#pragma omp barrier
+			#pragma omp single
+			end = omp_get_wtime();
+			time = (end-start)*1000;
+			count += time;
 			#pragma omp single
 			check_conflict(array, size);
 
@@ -172,13 +176,9 @@ int main(int argc, char *argv[])
 			//if(iter % 20)
 			//	writeMatrix(array);
 		}
-		#pragma omp barrier
-		#pragma omp single
-		end = omp_get_wtime();
-		time = (end-start)*1000;
+		
 	}
-	time = (end-start)*1000;
-	printf("Time: %f\n",time);
+	printf("Count: %f\n",count);
 	
 	
 	// start = omp_get_wtime();
@@ -364,7 +364,7 @@ void spawn( creature *array, int size, int len, int iter)
 				if(array[j].aliveOrDead == 0)
 				{
 					// retain creature id
-					array[j].strength = array[i].strength + (rand()%7) - 3;
+					array[j].strength = array[i].strength + (rand()%7) - 4;
 					 
 					array[j].base_life = array[i].base_life + (rand()%11) - 5;
 					array[j].lifetime = array[j].base_life;
